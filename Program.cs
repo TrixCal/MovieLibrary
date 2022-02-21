@@ -44,6 +44,18 @@ namespace MovieLibrary
                 Movies.Add(movie);
             }
             sr.Close();
+
+            //Display or Add Movies
+            Console.WriteLine("1) Add new Movie\n2) Display Movies");
+            string c = Console.ReadLine();
+            if(c == "1"){
+                //Add new movie, prevent duplicates
+            }
+            else{
+                foreach(Movie m in Movies){
+                    Console.WriteLine(m.ToString());
+                }
+            }
         }
     }
 }
