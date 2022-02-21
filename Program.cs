@@ -10,10 +10,9 @@ namespace MovieLibrary
         {
             //init
             var Movies = new List<Movie>();
-            var pullFile = "ml-latest-small/movies.csv";
-            //var pushFile = "movies.check.txt";
+            var file = "ml-latest-small/movies.csv";
             //add all movies from file to list
-            StreamReader sr = new StreamReader(pullFile);
+            StreamReader sr = new StreamReader(file);
             sr.ReadLine();
             while(!sr.EndOfStream){
                 Movie movie = new Movie();
@@ -46,14 +45,53 @@ namespace MovieLibrary
             sr.Close();
 
             //Display or Add Movies
-            Console.WriteLine("1) Add new Movie\n2) Display Movies");
-            string c = Console.ReadLine();
-            if(c == "1"){
-                //Add new movie, prevent duplicates
-            }
-            else{
-                foreach(Movie m in Movies){
-                    Console.WriteLine(m.ToString());
+            string c = "";
+            while(c != "exit"){
+                Console.WriteLine("1) Add new Movie\n2) Display Movies\n(Type \"exit\" to leave)");
+                c = Console.ReadLine();
+                if(c == "1"){
+                    //Movie Title input
+                    Console.Write("Movie Title: ");
+                    string title = Console.ReadLine();
+                    //Duplicate Check
+                    bool duplicate = false;
+                    foreach(Movie m in Movies){
+                        if(title.ToLower() == m.title.ToLower())
+                            duplicate = true;
+                    }
+                    if(!duplicate){
+                        //Calculate MovieID
+                        int movieID = 0;
+                        foreach(Movie m in Movies){
+                            if(movieID <= m.movieId)
+                                movieID = m.movieId + 1;
+                        }
+                        //Input Genres
+                        List<string> genres = new List<string>();
+                        while(c != "n"){
+                            Console.Write("Genre(s) (Type \"n\" to stop): ");
+                            c = Console.ReadLine();
+                            if(c != "n")
+                                genres.Add(c);
+                        }
+                        genres.Sort();
+                        //Create Movie object
+                        Movie movie = new Movie(movieID, title, genres);
+                        //Add to List
+                        Movies.Add(movie);
+                        //Add to File
+                        StreamWriter sw = new StreamWriter(file, true);
+                        sw.WriteLine(movie.ToString());
+                        sw.Close();
+                    }
+                    else{
+
+                    }
+                }
+                else if(c == "2"){
+                    foreach(Movie m in Movies){
+                        m.Display();
+                    }
                 }
             }
         }
